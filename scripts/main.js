@@ -3,7 +3,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // === GitHub Pages base path ===
-const basePath = `${window.location.origin}/coinproject`;
+const basePath = `${window.location.origin}/coin-project`;
 
 // === Scene Setup ===
 const scene = new THREE.Scene();

@@ -1,5 +1,5 @@
 // === GitHub Pages Base Path ===
-const basePath = `${window.location.origin}/coinproject`;
+const basePath = `${window.location.origin}/coin-project`;
 
 // === Get coin key from URL ===
 const params = new URLSearchParams(location.search);
