@@ -1,0 +1,20 @@
+{
+  "title": "2 Pounds",
+  "description": "The 2 pound coin is the largest denomination in UK coinage. It’s used for commemorations and general currency alike.",
+  "messages": [
+    { "type": "admin", "text": "When was the 2 pound coin first issued?" },
+    { "type": "user", "text": "The current bimetallic version came out in 1998." },
+    { "type": "admin", "text": "What are its metals?" },
+    { "type": "user", "text": "Cupronickel outer, nickel-brass inner." },
+    { "type": "admin", "text": "Is it often commemorative?" },
+    { "type": "user", "text": "Yes, many special editions exist." },
+    { "type": "admin", "text": "What’s the standard design?" },
+    { "type": "user", "text": "A concentric pattern representing technology." },
+    { "type": "admin", "text": "Is it legal tender everywhere?" },
+    { "type": "user", "text": "Yes, unless withdrawn officially." },
+    { "type": "admin", "text": "Do vending machines accept them?" },
+    { "type": "user", "text": "Most modern machines do." },
+    { "type": "admin", "text": "Is it used daily?" },
+    { "type": "user", "text": "Yes, especially for higher value payments." }
+  ]
+}

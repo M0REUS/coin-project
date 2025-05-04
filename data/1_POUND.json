@@ -1,0 +1,22 @@
+{
+  "title": "1 Pound",
+  "description": "The 1 pound coin is a secure, twelve-sided, bimetallic coin introduced in 2017. It’s a key part of UK currency.",
+  "messages": [
+    { "type": "admin", "text": "When was the current 1 pound coin introduced?" },
+    { "type": "user", "text": "In 2017." },
+    { "type": "admin", "text": "Why does it have 12 sides?" },
+    { "type": "user", "text": "To prevent counterfeiting." },
+    { "type": "admin", "text": "What metals are used in it?" },
+    { "type": "user", "text": "Nickel-brass center, nickel-plated outer." },
+    { "type": "admin", "text": "What was the old pound coin like?" },
+    { "type": "user", "text": "It was round and less secure." },
+    { "type": "admin", "text": "Is the old pound still valid?" },
+    { "type": "user", "text": "No, it was demonetised." },
+    { "type": "admin", "text": "What’s on the back of the coin?" },
+    { "type": "user", "text": "A design representing the UK’s nations." },
+    { "type": "admin", "text": "Is the coin machine-friendly?" },
+    { "type": "user", "text": "Yes, it works in most machines." },
+    { "type": "admin", "text": "Is it used daily?" },
+    { "type": "user", "text": "Yes, very commonly." }
+  ]
+}

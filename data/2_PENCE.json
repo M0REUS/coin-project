@@ -1,0 +1,20 @@
+{
+  "title": "2 Pence",
+  "description": "The 2 pence coin is a large, copper-plated steel coin introduced in 1971. It’s widely recognized and frequently used in the UK.",
+  "messages": [
+    { "type": "admin", "text": "What is the 2 pence coin made from?" },
+    { "type": "user", "text": "Copper-plated steel." },
+    { "type": "admin", "text": "What was the original metal?" },
+    { "type": "user", "text": "It used to be bronze." },
+    { "type": "admin", "text": "How much does it weigh?" },
+    { "type": "user", "text": "7.12 grams." },
+    { "type": "admin", "text": "What’s its diameter?" },
+    { "type": "user", "text": "25.9 millimeters." },
+    { "type": "admin", "text": "Is there a legal limit to use?" },
+    { "type": "user", "text": "Yes, up to 20p per transaction." },
+    { "type": "admin", "text": "Where is it often used?" },
+    { "type": "user", "text": "Arcades, change, and coin tosses." },
+    { "type": "admin", "text": "Is it still minted today?" },
+    { "type": "user", "text": "Yes, in large quantities." }
+  ]
+}

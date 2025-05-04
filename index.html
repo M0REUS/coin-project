@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Coin Carousel</title>
+
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" media="all">
+
+  <link rel="stylesheet" href="./styles.css">
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+
+<body class="index-page">
+  <div id="popup"></div>
+
+  <a href="javascript:void(0)" class="hamburger-button" id="hamburger">&#9776;</a>
+
+  <div id="menu">
+    <ul>
+      <li data-coin="1_PENNY">1 Penny</li>
+      <li data-coin="1_POUND">1 Pound</li>
+      <li data-coin="2_PENCE">2 Pence</li>
+      <li data-coin="2_POUNDS">2 Pounds</li>
+      <li data-coin="50_PENCE">50 Pence</li>
+    </ul>
+  </div>
+
+  <script type="module" src="scripts/main.js"></script>
+</body>
+
+</html>

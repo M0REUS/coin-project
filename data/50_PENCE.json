@@ -1,0 +1,20 @@
+{
+  "title": "50 Pence",
+  "description": "The 50 pence coin is a seven-sided coin introduced in 1969. It’s well-known for commemorative designs and its distinct shape.",
+  "messages": [
+    { "type": "admin", "text": "Why is the 50p coin seven-sided?" },
+    { "type": "user", "text": "It helps machines recognize and sort it easily." },
+    { "type": "admin", "text": "What metal is it made of?" },
+    { "type": "user", "text": "Cupronickel." },
+    { "type": "admin", "text": "When was it introduced?" },
+    { "type": "user", "text": "In 1969." },
+    { "type": "admin", "text": "Does it have commemorative versions?" },
+    { "type": "user", "text": "Yes, dozens have been minted." },
+    { "type": "admin", "text": "Is it legal tender?" },
+    { "type": "user", "text": "Yes, up to £10 in a single payment." },
+    { "type": "admin", "text": "What is its diameter?" },
+    { "type": "user", "text": "27.3 millimeters." },
+    { "type": "admin", "text": "What does it weigh?" },
+    { "type": "user", "text": "8 grams." }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "title": "1 Penny",
+  "description": "The 1 penny coin is a small copper-plated steel coin used in the UK since 1971. It’s essential for low-value transactions.",
+  "messages": [
+    { "type": "admin", "text": "What is the 1 penny coin made of?" },
+    { "type": "user", "text": "Copper-plated steel." },
+    { "type": "admin", "text": "Was it always made of that material?" },
+    { "type": "user", "text": "No, it used to be bronze." },
+    { "type": "admin", "text": "When was it first introduced?" },
+    { "type": "user", "text": "In 1971 during decimalisation." },
+    { "type": "admin", "text": "Is the 1p coin still used widely?" },
+    { "type": "user", "text": "Yes, especially in giving change." },
+    { "type": "admin", "text": "Can you legally melt them?" },
+    { "type": "user", "text": "No, that’s illegal in the UK." },
+    { "type": "admin", "text": "Is there talk of removing it?" },
+    { "type": "user", "text": "Yes, but no official plans yet." },
+    { "type": "admin", "text": "What’s its diameter?" },
+    { "type": "user", "text": "About 20.3 millimeters." },
+    { "type": "admin", "text": "How much does it weigh?" },
+    { "type": "user", "text": "Roughly 3.56 grams." }
+  ]
+}
