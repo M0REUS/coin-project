@@ -2,6 +2,9 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+// === GitHub Pages base path ===
+const basePath = `${window.location.origin}/coinproject`;
+
 // === Scene Setup ===
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -10,7 +13,7 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 camera.position.z = 16;
 
-// === Orbit Controls ===
+// === Controls ===
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enablePan = false;
 controls.enableZoom = false;
@@ -22,16 +25,16 @@ let isUserInteracting = false;
 controls.addEventListener('start', () => isUserInteracting = true);
 controls.addEventListener('end', () => isUserInteracting = false);
 
-// === Lighting ===
+// === Light ===
 scene.add(new THREE.AmbientLight(0xffffff, 1));
 
-// === Audio Setup ===
+// === Audio ===
 let clickSound, hoverSound;
 let audioInitialized = false;
 
 function createAudioElements() {
-  clickSound = new Audio('./sounds/click.m4a');
-  hoverSound = new Audio('./sounds/tick.m4a');
+  clickSound = new Audio(`${basePath}/sounds/click.m4a`);
+  hoverSound = new Audio(`${basePath}/sounds/tick.m4a`);
   clickSound.volume = 0.5;
   hoverSound.volume = 0.3;
 }
@@ -41,8 +44,8 @@ window.addEventListener('pointerdown', () => {
     createAudioElements();
     clickSound.volume = 0;
     hoverSound.volume = 0;
-    clickSound.play().then(() => clickSound.pause()).catch(() => { });
-    hoverSound.play().then(() => hoverSound.pause()).catch(() => { });
+    clickSound.play().then(() => clickSound.pause()).catch(() => {});
+    hoverSound.play().then(() => hoverSound.pause()).catch(() => {});
     setTimeout(() => {
       clickSound.volume = 0.5;
       hoverSound.volume = 0.3;
@@ -54,18 +57,18 @@ window.addEventListener('pointerdown', () => {
 // === Tooltip ===
 const popup = document.getElementById('popup');
 
-// === Raycasting Setup ===
+// === Raycaster ===
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let INTERSECTED = null;
 
 // === Coin Setup ===
 const coinPaths = [
-  './models/1_PENNY.glb',
-  './models/1_POUND.glb',
-  './models/2_PENCE.glb',
-  './models/2_POUNDS.glb',
-  './models/50_PENCE.glb',
+  `${basePath}/models/1_PENNY.glb`,
+  `${basePath}/models/1_POUND.glb`,
+  `${basePath}/models/2_PENCE.glb`,
+  `${basePath}/models/2_POUNDS.glb`,
+  `${basePath}/models/50_PENCE.glb`,
 ];
 
 const coinInfo = [
@@ -153,13 +156,11 @@ window.addEventListener('click', () => {
 
       if (clickSound && audioInitialized) {
         clickSound.currentTime = 0;
-        clickSound.play().catch(() => { });
+        clickSound.play().catch(() => {});
       }
 
-      // Disable bounce
       target.userData.flyOut = true;
 
-      // Animate fly-up
       const startY = target.position.y;
       const endY = startY + 10;
       const startRotation = target.rotation.y;
@@ -169,18 +170,15 @@ window.addEventListener('click', () => {
       function animateUp() {
         const t = frame / totalFrames;
         target.position.y = startY + (endY - startY) * t;
-
-        // Rotate 180° (π radians) → now 216° (~π * 1.2)
-        target.rotation.y = startRotation + Math.PI * 1.2 * t;
-
+        target.rotation.y = startRotation + Math.PI * 1.2 * t; // 20% faster spin
         frame++;
 
         if (frame <= totalFrames) {
           requestAnimationFrame(animateUp);
         } else {
           localStorage.setItem('lastViewedCoin', coinLabel);
-          localStorage.setItem('lastViewedGLB', `${location.origin}/coinproject/models/${coinLabel}.glb`);
-          window.location.href = `coins/${coinLabel}.html`;
+          localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinLabel}.glb`);
+          window.location.href = `${basePath}/coins/${coinLabel}.html`;
         }
       }
 
@@ -194,12 +192,12 @@ document.querySelectorAll('#menu li').forEach((item) => {
   item.addEventListener('click', () => {
     const coinPage = item.getAttribute('data-coin');
     localStorage.setItem('lastViewedCoin', coinPage.toUpperCase());
-    localStorage.setItem('lastViewedGLB', `${location.origin}/coinproject/models/${coinPage}.glb`);
-    window.location.href = `coins/${coinPage}.html`;
+    localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinPage}.glb`);
+    window.location.href = `${basePath}/coins/${coinPage}.html`;
   });
 });
 
-// === Touch Carousel ===
+// === Touch Support ===
 let startX = 0;
 window.addEventListener('touchstart', (e) => {
   startX = e.touches[0].clientX;
@@ -219,21 +217,20 @@ window.addEventListener('touchend', () => {
 // === Animate Loop ===
 function animate() {
   requestAnimationFrame(animate);
+  const delta = clock.getDelta();
   controls.update();
-
-  const elapsed = clock.getElapsedTime();
 
   if (!isUserInteracting) {
     coinGroup.rotation.y += 0.0025;
   }
 
   coinMeshes.forEach((coin) => {
-    coin.rotation.y += coin.userData.spinY;
-    coin.rotation.x += coin.userData.spinX;
+    coin.rotation.y += coin.userData.spinY * delta * 60;
+    coin.rotation.x += coin.userData.spinX * delta * 60;
 
-    // Only bounce if not flying out
     if (!coin.userData.flyOut) {
-      const bob = Math.sin(elapsed * 2 + coin.userData.bobOffset) * coin.userData.bobAmplitude;
+      const time = clock.elapsedTime;
+      const bob = Math.sin(time * 2 + coin.userData.bobOffset) * coin.userData.bobAmplitude;
       coin.position.y = bob;
     }
   });
@@ -251,7 +248,7 @@ function animate() {
       INTERSECTED = target;
       if (hoverSound && audioInitialized) {
         hoverSound.currentTime = 0;
-        hoverSound.play().catch(() => { });
+        hoverSound.play().catch(() => {});
       }
       document.body.style.cursor = 'pointer';
     }
