@@ -2,18 +2,15 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-// === GitHub Pages base path ===
 const basePath = `${window.location.origin}/coin-project`;
 
-// === Scene Setup ===
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 camera.position.z = 16;
 
-// === Controls ===
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: document.getElementById('three-canvas') });
+renderer.setSize(window.innerWidth, window.innerHeight);
+
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enablePan = false;
 controls.enableZoom = false;
@@ -25,13 +22,11 @@ let isUserInteracting = false;
 controls.addEventListener('start', () => isUserInteracting = true);
 controls.addEventListener('end', () => isUserInteracting = false);
 
-// === Light ===
 scene.add(new THREE.AmbientLight(0xffffff, 1));
 
-// === Audio ===
+// === Sound ===
 let clickSound, hoverSound;
 let audioInitialized = false;
-
 function createAudioElements() {
   clickSound = new Audio(`${basePath}/sounds/click.m4a`);
   hoverSound = new Audio(`${basePath}/sounds/tick.m4a`);
@@ -39,36 +34,21 @@ function createAudioElements() {
   hoverSound.volume = 0.3;
 }
 
-window.addEventListener('pointerdown', () => {
-  if (!audioInitialized) {
-    createAudioElements();
-    clickSound.volume = 0;
-    hoverSound.volume = 0;
-    clickSound.play().then(() => clickSound.pause()).catch(() => {});
-    hoverSound.play().then(() => hoverSound.pause()).catch(() => {});
-    setTimeout(() => {
-      clickSound.volume = 0.5;
-      hoverSound.volume = 0.3;
-    }, 100);
-    audioInitialized = true;
-  }
-});
-
 // === Tooltip ===
 const popup = document.getElementById('popup');
 
-// === Raycaster ===
+// === Raycasting ===
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let INTERSECTED = null;
 
-// === Coin Setup ===
+// === Coins ===
 const coinPaths = [
-  `${basePath}/models/1_PENNY.glb`,
-  `${basePath}/models/1_POUND.glb`,
-  `${basePath}/models/2_PENCE.glb`,
-  `${basePath}/models/2_POUNDS.glb`,
-  `${basePath}/models/50_PENCE.glb`,
+  `${basePath}/models/1-penny.glb`,
+  `${basePath}/models/1-pound.glb`,
+  `${basePath}/models/2-pence.glb`,
+  `${basePath}/models/2-pounds.glb`,
+  `${basePath}/models/50-pence.glb`
 ];
 
 const coinInfo = [
@@ -86,12 +66,10 @@ scene.add(coinGroup);
 const radius = 8;
 const clock = new THREE.Clock();
 
-// === Load Coins ===
 coinPaths.forEach((path, i) => {
   const loader = new GLTFLoader();
   loader.load(path, (gltf) => {
     const coin = gltf.scene;
-
     const box = new THREE.Box3().setFromObject(coin);
     const size = new THREE.Vector3();
     box.getSize(size);
@@ -119,7 +97,7 @@ coinPaths.forEach((path, i) => {
     coinMeshes.push(coin);
 
     const lastViewed = localStorage.getItem('lastViewedCoin');
-    if (lastViewed && lastViewed === coin.userData.label.replace(' ', '_').toUpperCase()) {
+    if (lastViewed && lastViewed === coin.userData.label.replace(' ', '-').toLowerCase()) {
       const focusAngle = (i / coinPaths.length) * Math.PI * 2;
       coinGroup.rotation.y = -focusAngle;
       localStorage.removeItem('lastViewedCoin');
@@ -127,7 +105,7 @@ coinPaths.forEach((path, i) => {
   });
 });
 
-// === Resize Handling ===
+// === Resize ===
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
@@ -140,7 +118,7 @@ window.addEventListener('mousemove', (event) => {
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 });
 
-// === Coin Click with Fly-Up Animation ===
+// === Coin Click ===
 window.addEventListener('click', () => {
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(coinMeshes, true);
@@ -152,48 +130,59 @@ window.addEventListener('click', () => {
     }
 
     if (coinMeshes.includes(target)) {
-      const coinLabel = target.userData.label.replace(' ', '_').toUpperCase();
+      if (!audioInitialized) {
+        createAudioElements();
+        clickSound.volume = 0;
+        hoverSound.volume = 0;
+        clickSound.play().then(() => clickSound.pause()).catch(() => {});
+        hoverSound.play().then(() => hoverSound.pause()).catch(() => {});
+        setTimeout(() => {
+          clickSound.volume = 0.5;
+          hoverSound.volume = 0.3;
+        }, 100);
+        audioInitialized = true;
+      }
 
-      if (clickSound && audioInitialized) {
+      const label = target.userData.label;
+      const coinSlug = label.replace(' ', '-').toLowerCase();
+      const startY = target.position.y;
+      const endY = startY + 10;
+      const startRotation = target.rotation.y;
+      const duration = 500;
+      const startTime = performance.now();
+
+      if (clickSound) {
         clickSound.currentTime = 0;
         clickSound.play().catch(() => {});
       }
 
-      target.userData.flyOut = true;
-
-      const startY = target.position.y;
-      const endY = startY + 10;
-      const startRotation = target.rotation.y;
-      const totalFrames = 15;
-      let frame = 0;
-
-      function animateUp() {
-        const t = frame / totalFrames;
+      function animateUp(time) {
+        const elapsed = time - startTime;
+        const t = Math.min(elapsed / duration, 1);
         target.position.y = startY + (endY - startY) * t;
-        target.rotation.y = startRotation + Math.PI * 1.2 * t; // 20% faster spin
-        frame++;
+        target.rotation.y = startRotation + Math.PI * 1.2 * t;
 
-        if (frame <= totalFrames) {
+        if (t < 1) {
           requestAnimationFrame(animateUp);
         } else {
-          localStorage.setItem('lastViewedCoin', coinLabel);
-          localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinLabel}.glb`);
-          window.location.href = `${basePath}/coins/${coinLabel}.html`;
+          localStorage.setItem('lastViewedCoin', coinSlug);
+          localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinSlug}.glb`);
+          window.location.href = `${basePath}/coins/${coinSlug}.html`;
         }
       }
 
-      animateUp();
+      requestAnimationFrame(animateUp);
     }
   }
 });
 
-// === Menu Navigation ===
-document.querySelectorAll('#menu li').forEach((item) => {
+// === Sidebar Menu Navigation ===
+document.querySelectorAll('#menu li').forEach(item => {
   item.addEventListener('click', () => {
-    const coinPage = item.getAttribute('data-coin');
-    localStorage.setItem('lastViewedCoin', coinPage.toUpperCase());
-    localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinPage}.glb`);
-    window.location.href = `${basePath}/coins/${coinPage}.html`;
+    const coinSlug = item.getAttribute('data-coin');
+    localStorage.setItem('lastViewedCoin', coinSlug);
+    localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinSlug}.glb`);
+    window.location.href = `${basePath}/coins/${coinSlug}.html`;
   });
 });
 
@@ -207,7 +196,7 @@ if (hamburger && menu) {
   });
 }
 
-// === Touch Support ===
+// === Touch Swipe Support ===
 let startX = 0;
 window.addEventListener('touchstart', (e) => {
   startX = e.touches[0].clientX;
@@ -224,7 +213,7 @@ window.addEventListener('touchend', () => {
   isUserInteracting = false;
 });
 
-// === Animate Loop ===
+// === Animation Loop ===
 function animate() {
   requestAnimationFrame(animate);
   const delta = clock.getDelta();
@@ -269,15 +258,17 @@ function animate() {
     const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
     const y = (-(screenPos.y * 0.5) + 0.5) * window.innerHeight;
 
-    popup.style.left = `${x}px`;
-    popup.style.top = `${y}px`;
-    popup.innerText = INTERSECTED.userData.label || 'Coin';
-    popup.classList.add('visible');
+    if (popup) {
+      popup.style.left = `${x}px`;
+      popup.style.top = `${y}px`;
+      popup.innerText = INTERSECTED.userData.label || 'Coin';
+      popup.classList.add('visible');
+    }
   } else {
     if (INTERSECTED) {
       INTERSECTED = null;
       document.body.style.cursor = 'default';
-      popup.classList.remove('visible');
+      if (popup) popup.classList.remove('visible');
     }
   }
 

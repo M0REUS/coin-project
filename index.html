@@ -22,20 +22,27 @@
 </head>
 
 <body class="index-page">
+  <!-- Three.js canvas for the carousel -->
+  <canvas id="three-canvas"></canvas>
+
+  <!-- Tooltip on hover -->
   <div id="popup"></div>
 
+  <!-- Mobile hamburger menu -->
   <a href="javascript:void(0)" class="hamburger-button" id="hamburger">&#9776;</a>
 
+  <!-- Sidebar menu for coin navigation -->
   <div id="menu">
     <ul>
-      <li data-coin="1_PENNY">1 Penny</li>
-      <li data-coin="1_POUND">1 Pound</li>
-      <li data-coin="2_PENCE">2 Pence</li>
-      <li data-coin="2_POUNDS">2 Pounds</li>
-      <li data-coin="50_PENCE">50 Pence</li>
+      <li data-coin="1-penny">1 Penny</li>
+      <li data-coin="1-pound">1 Pound</li>
+      <li data-coin="2-pence">2 Pence</li>
+      <li data-coin="2-pounds">2 Pounds</li>
+      <li data-coin="50-pence">50 Pence</li>
     </ul>
   </div>
 
+  <!-- Main JS controlling the 3D carousel -->
   <script type="module" src="scripts/main.js"></script>
 </body>
 

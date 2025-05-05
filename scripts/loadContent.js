@@ -37,7 +37,7 @@ fetch(jsonPath)
     // Highlight active menu item
     document.querySelectorAll('#menu li').forEach(item => {
       const coin = item.getAttribute('data-coin');
-      if (coin === coinKey) {
+      if (coin && coin.toLowerCase() === coinKey.toLowerCase()) {
         item.classList.add('active');
       }
     });
@@ -50,10 +50,10 @@ fetch(jsonPath)
 // === Sidebar Menu Navigation ===
 document.querySelectorAll('#menu li').forEach(item => {
   item.addEventListener('click', () => {
-    const coinPage = item.getAttribute('data-coin');
-    localStorage.setItem('lastViewedCoin', coinPage.toUpperCase());
-    localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinPage}.glb`);
-    window.location.href = `${basePath}/coins/${coinPage}.html`;
+    const coinSlug = item.getAttribute('data-coin');
+    localStorage.setItem('lastViewedCoin', coinSlug);
+    localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinSlug}.glb`);
+    window.location.href = `${basePath}/coins/${coinSlug}.html`;
   });
 });
 
