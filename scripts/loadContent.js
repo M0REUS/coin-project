@@ -46,38 +46,3 @@ fetch(jsonPath)
     console.error(err);
     alert("Failed to load coin content.");
   });
-
-// === Sidebar Menu Navigation ===
-document.querySelectorAll('#menu li').forEach(item => {
-  item.addEventListener('click', () => {
-    const coinSlug = item.getAttribute('data-coin');
-    localStorage.setItem('lastViewedCoin', coinSlug);
-    localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinSlug}.glb`);
-    window.location.href = `${basePath}/coins/${coinSlug}.html`;
-  });
-});
-
-// === Hamburger Toggle (Mobile Menu) ===
-const hamburger = document.getElementById('hamburger');
-const menu = document.getElementById('menu');
-
-if (hamburger && menu) {
-  hamburger.addEventListener('click', () => {
-    menu.classList.toggle('active');
-  });
-}
-
-// === Scroll-to-Top Button Behavior ===
-const scrollTopBtn = document.getElementById('scrollTop');
-
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 200) {
-    scrollTopBtn.classList.add('visible');
-  } else {
-    scrollTopBtn.classList.remove('visible');
-  }
-});
-
-scrollTopBtn.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});

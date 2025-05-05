@@ -1,6 +1,10 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { setupGlobalAudioInit, playClick, playHover } from './audio.js';
+
+// === Init audio system ===
+setupGlobalAudioInit();
 
 const basePath = `${window.location.origin}/coin-project`;
 
@@ -10,7 +14,6 @@ camera.position.z = 16;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: document.getElementById('three-canvas') });
 
-// === Lock canvas height to prevent mobile resize jump ===
 let fixedHeight = window.innerHeight;
 renderer.setSize(window.innerWidth, fixedHeight);
 renderer.domElement.style.height = `${fixedHeight}px`;
@@ -28,16 +31,6 @@ controls.addEventListener('end', () => isUserInteracting = false);
 
 scene.add(new THREE.AmbientLight(0xffffff, 1));
 
-// === Sound ===
-let clickSound, hoverSound;
-let audioInitialized = false;
-function createAudioElements() {
-  clickSound = new Audio(`${basePath}/sounds/click.m4a`);
-  hoverSound = new Audio(`${basePath}/sounds/tick.m4a`);
-  clickSound.volume = 0.5;
-  hoverSound.volume = 0.3;
-}
-
 // === Tooltip ===
 const popup = document.getElementById('popup');
 
@@ -46,7 +39,7 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let INTERSECTED = null;
 
-// === Coins ===
+// === Coin Models ===
 const coinPaths = [
   `${basePath}/models/1-penny.glb`,
   `${basePath}/models/1-pound.glb`,
@@ -109,7 +102,7 @@ coinPaths.forEach((path, i) => {
   });
 });
 
-// === Debounced Resize Event to Avoid Mobile Scroll Resize ===
+// === Resize ===
 let resizeTimeout;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimeout);
@@ -122,7 +115,7 @@ window.addEventListener('resize', () => {
   }, 250);
 });
 
-// === Mouse Tracking ===
+// === Mouse Position for Raycasting ===
 window.addEventListener('mousemove', (event) => {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
@@ -140,18 +133,7 @@ window.addEventListener('click', () => {
     }
 
     if (coinMeshes.includes(target)) {
-      if (!audioInitialized) {
-        createAudioElements();
-        clickSound.volume = 0;
-        hoverSound.volume = 0;
-        clickSound.play().then(() => clickSound.pause()).catch(() => {});
-        hoverSound.play().then(() => hoverSound.pause()).catch(() => {});
-        setTimeout(() => {
-          clickSound.volume = 0.5;
-          hoverSound.volume = 0.3;
-        }, 100);
-        audioInitialized = true;
-      }
+      playClick();
 
       const label = target.userData.label;
       const coinSlug = label.replace(' ', '-').toLowerCase();
@@ -160,11 +142,6 @@ window.addEventListener('click', () => {
       const startRotation = target.rotation.y;
       const duration = 500;
       const startTime = performance.now();
-
-      if (clickSound) {
-        clickSound.currentTime = 0;
-        clickSound.play().catch(() => {});
-      }
 
       function animateUp(time) {
         const elapsed = time - startTime;
@@ -186,9 +163,12 @@ window.addEventListener('click', () => {
   }
 });
 
-// === Sidebar Menu Navigation ===
+// === Menu Navigation with Sound ===
 document.querySelectorAll('#menu li').forEach(item => {
+  item.addEventListener('mouseenter', playHover);
+
   item.addEventListener('click', () => {
+    playClick();
     const coinSlug = item.getAttribute('data-coin');
     localStorage.setItem('lastViewedCoin', coinSlug);
     localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinSlug}.glb`);
@@ -196,7 +176,7 @@ document.querySelectorAll('#menu li').forEach(item => {
   });
 });
 
-// === Hamburger Toggle (Mobile Menu) ===
+// === Hamburger Menu Toggle ===
 const hamburger = document.getElementById('hamburger');
 const menu = document.getElementById('menu');
 
@@ -206,7 +186,7 @@ if (hamburger && menu) {
   });
 }
 
-// === Touch Swipe Support ===
+// === Touch Support ===
 let startX = 0;
 window.addEventListener('touchstart', (e) => {
   startX = e.touches[0].clientX;
@@ -255,10 +235,7 @@ function animate() {
 
     if (INTERSECTED !== target) {
       INTERSECTED = target;
-      if (hoverSound && audioInitialized) {
-        hoverSound.currentTime = 0;
-        hoverSound.play().catch(() => {});
-      }
+      playHover();
       document.body.style.cursor = 'pointer';
     }
 
