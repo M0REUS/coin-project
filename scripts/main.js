@@ -9,7 +9,11 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 camera.position.z = 16;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: document.getElementById('three-canvas') });
-renderer.setSize(window.innerWidth, window.innerHeight);
+
+// === Lock canvas height to prevent mobile resize jump ===
+let fixedHeight = window.innerHeight;
+renderer.setSize(window.innerWidth, fixedHeight);
+renderer.domElement.style.height = `${fixedHeight}px`;
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enablePan = false;
@@ -105,11 +109,17 @@ coinPaths.forEach((path, i) => {
   });
 });
 
-// === Resize ===
+// === Debounced Resize Event to Avoid Mobile Scroll Resize ===
+let resizeTimeout;
 window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    fixedHeight = window.innerHeight;
+    camera.aspect = window.innerWidth / fixedHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, fixedHeight);
+    renderer.domElement.style.height = `${fixedHeight}px`;
+  }, 250);
 });
 
 // === Mouse Tracking ===
@@ -256,7 +266,7 @@ function animate() {
     INTERSECTED.getWorldPosition(worldPosition);
     const screenPos = worldPosition.project(camera);
     const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
-    const y = (-(screenPos.y * 0.5) + 0.5) * window.innerHeight;
+    const y = (-(screenPos.y * 0.5) + 0.5) * fixedHeight;
 
     if (popup) {
       popup.style.left = `${x}px`;

@@ -20,7 +20,11 @@ const renderer = new THREE.WebGLRenderer({
   alpha: true,
   antialias: true
 });
-renderer.setSize(window.innerWidth, window.innerHeight);
+
+// === Lock canvas height on initial load (prevents resize issue on mobile) ===
+const fixedHeight = window.innerHeight;
+renderer.setSize(window.innerWidth, fixedHeight);
+renderer.domElement.style.height = `${fixedHeight}px`;
 
 // === Lighting ===
 scene.add(new THREE.AmbientLight(0xffffff, 1));
@@ -82,11 +86,17 @@ loader.load(
   }
 );
 
-// === Responsive Resize ===
+// === Responsive Resize with Debouncing (fix mobile scroll resize issue) ===
+let resizeTimeout;
 window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    const fixedHeight = window.innerHeight;
+    camera.aspect = window.innerWidth / fixedHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, fixedHeight);
+    renderer.domElement.style.height = `${fixedHeight}px`;
+  }, 250);
 });
 
 // === Animation Loop ===
