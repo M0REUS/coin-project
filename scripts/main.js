@@ -146,6 +146,7 @@ window.addEventListener('click', () => {
       function animateUp(time) {
         const elapsed = time - startTime;
         const t = Math.min(elapsed / duration, 1);
+        target.userData.flyOut = true;
         target.position.y = startY + (endY - startY) * t;
         target.rotation.y = startRotation + Math.PI * 1.2 * t;
 

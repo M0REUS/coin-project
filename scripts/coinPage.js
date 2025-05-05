@@ -2,6 +2,9 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { setupGlobalAudioInit, playClick, playHover } from './audio.js';
 
+const params = new URLSearchParams(location.search);
+const coinKey = params.get('coin');
+
 // === Initialize audio on first user interaction ===
 setupGlobalAudioInit();
 
@@ -112,16 +115,28 @@ animate();
 // === Sidebar Menu Navigation + Sound ===
 const basePath = `${window.location.origin}/coin-project`;
 document.querySelectorAll('#menu li').forEach(item => {
-  item.addEventListener('mouseenter', playHover);
+  const coinSlug = item.getAttribute('data-coin');
+  let isActive = false;
 
-  item.addEventListener('click', () => {
-    playClick();
+  if (coinSlug && coinSlug.toLowerCase() === coinKey.toLowerCase()) {
+    item.classList.add('active');
+    item.setAttribute('disabled', 'true');
+    isActive = true;
+  }
 
-    const coinSlug = item.getAttribute('data-coin');
-    localStorage.setItem('lastViewedCoin', coinSlug);
-    localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinSlug}.glb`);
-    window.location.href = `${basePath}/coins/${coinSlug}.html`;
-  });
+  if (isActive === false) {
+    item.addEventListener('mouseenter', playHover);
+
+    item.addEventListener('click', () => {
+      playClick();
+
+      localStorage.setItem('lastViewedCoin', coinSlug);
+      localStorage.setItem('lastViewedGLB', `${basePath}/models/${coinSlug}.glb`);
+      setTimeout(() => {
+        window.location.href = `${basePath}/coins/${coinSlug}.html`;
+      }, 200);
+    });
+  }
 });
 
 // === Hamburger Toggle (Mobile Menu) ===
@@ -133,6 +148,18 @@ if (hamburger && menu) {
     menu.classList.toggle('active');
   });
 }
+
+// === Close Button Behavior ===
+const closeBtn = document.getElementById('closeButton');
+
+closeBtn.addEventListener('mouseenter', playHover);
+
+closeBtn.addEventListener('click', () => {
+  playClick();
+  setTimeout(() => {
+    window.location.href = `${basePath}/index.html`;
+  }, 200);
+});
 
 // === Scroll-to-Top Button Behavior ===
 const scrollTopBtn = document.getElementById('scrollTop');

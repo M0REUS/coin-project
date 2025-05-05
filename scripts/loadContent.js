@@ -33,14 +33,6 @@ fetch(jsonPath)
       div.textContent = msg.text;
       chatBox.appendChild(div);
     });
-
-    // Highlight active menu item
-    document.querySelectorAll('#menu li').forEach(item => {
-      const coin = item.getAttribute('data-coin');
-      if (coin && coin.toLowerCase() === coinKey.toLowerCase()) {
-        item.classList.add('active');
-      }
-    });
   })
   .catch(err => {
     console.error(err);
