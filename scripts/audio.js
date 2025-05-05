@@ -27,7 +27,6 @@ function initializeAudioOnce() {
 
 function setupGlobalAudioInit() {
   ['click', 'mousemove', 'touchstart', 'keydown'].forEach(event => {
-    console.log('init')
     window.addEventListener(event, initializeAudioOnce, { once: true });
   });
 }
