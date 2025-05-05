@@ -197,6 +197,16 @@ document.querySelectorAll('#menu li').forEach((item) => {
   });
 });
 
+// === Hamburger Toggle (Mobile Menu) ===
+const hamburger = document.getElementById('hamburger');
+const menu = document.getElementById('menu');
+
+if (hamburger && menu) {
+  hamburger.addEventListener('click', () => {
+    menu.classList.toggle('active');
+  });
+}
+
 // === Touch Support ===
 let startX = 0;
 window.addEventListener('touchstart', (e) => {
