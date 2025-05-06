@@ -13,7 +13,7 @@ html {
 
 body {
   font-family: 'Playfair Display', Georgia, serif;
-  background: radial-gradient(50% 50% at 50% 50%, #141414 0%, #343434 100%);
+  background: radial-gradient(50% 50% at 50% 50%, #2F2F2F 0%, #020202 100%);;
   color: white;
 }
 
@@ -37,24 +37,23 @@ canvas {
 .hamburger-button,
 #scrollTop {
   position: fixed;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   font-size: 20px;
-  font-weight: 700;
-  color: #ffffffcc;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
+  font-weight: bold;
+  color: #ccc;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 50%;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  padding: 0;
-  box-sizing: border-box;
   cursor: pointer;
   z-index: 12;
-  transition: background 0.2s ease, color 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
 .close-button {
@@ -126,11 +125,15 @@ p.description {
 }
 
 .message {
-  background: #2a2a2a;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  backdrop-filter: blur(10px);
   padding: 12px 16px;
-  border-radius: 12px;
-  line-height: 1.5;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   font-size: 28px;
+  color: #ccc;
+  font-family: inherit;
+  line-height: 1.5;
   max-width: 75%;
   width: fit-content;
   word-break: break-word;
@@ -138,19 +141,20 @@ p.description {
 }
 
 .message.user {
-  background: #0077ff;
+  background: rgba(0, 119, 255, 0.3);
   color: white;
   text-align: right;
   margin-left: auto;
+  backdrop-filter: blur(10px);
 }
 
 /* === TOOLTIP (INDEX PAGE) === */
 #popup {
   position: absolute;
-  padding: 6px 10px;
-  background: #ffffffdd;
-  color: #000;
-  border-radius: 4px;
+  padding: 10px 16px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  color: white;
+  border-radius: 12px;
   font-size: 32px;
   pointer-events: none;
   transform: translate(-50%, -100%);
@@ -158,6 +162,8 @@ p.description {
   transition: opacity 0.3s ease;
   z-index: 10;
   text-wrap: pretty;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 #popup.visible {
@@ -243,7 +249,7 @@ body.index-page canvas {
     display: none;
 
     position: fixed;
-    top: 72px;
+    top: 80px;
     left: 32px;
     width: fit-content;
     max-width: 200px;
@@ -309,6 +315,10 @@ body.index-page canvas {
 
   #popup {
     font-size: 24px;
+  }
+
+  #menu {
+    left: 16px;
   }
 
   .close-button {
