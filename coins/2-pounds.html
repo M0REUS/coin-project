@@ -1,6 +1,50 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="refresh" content="0;url=../coins/coin-template.html?coin=2-pounds">
-  </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2 Pounds Coin Detail</title>
+
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" media="all">
+
+  <link rel="stylesheet" href="../styles.css" />
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.176.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.176.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <a href="javascript:void(0)" class="hamburger-button" id="hamburger">&#9776;</a>
+  <a href="javascript:void(0)" id="closeButton" class="close-button" title="Back to main">&times;</a>
+  <canvas id="three-canvas"></canvas>
+
+  <div id="menu">
+    <div class="menu-header">Coin History</div>
+    <ul>
+      <li data-coin="1-penny">1 Penny</li>
+      <li data-coin="1-pound">1 Pound</li>
+      <li data-coin="2-pence">2 Pence</li>
+      <li data-coin="2-pounds">2 Pounds</li>
+      <li data-coin="50-pence">50 Pence</li>
+    </ul>
+  </div>
+
+  <div class="content">
+    <h1 id="coin-title">Loading...</h1>
+    <p class="description" id="coin-description"></p>
+    <div class="chat" id="chat-box"></div>
+  </div>
+
+  <button id="scrollTop" title="Scroll to top">↑</button>
+
+  <script type="module" src="../scripts/coinPage.js"></script>
+  <script type="module" src="../scripts/loadContent.js"></script>
+</body>
 </html>

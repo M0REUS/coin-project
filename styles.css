@@ -186,7 +186,6 @@ p.description {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   z-index: 20;
   color: white;
-  font-family: inherit;
 }
 
 #menu ul {
@@ -204,20 +203,20 @@ p.description {
   text-wrap: pretty;
 }
 
-#menu div {
-  margin-bottom: 16px;
-  font-size: 21px;
-  font-weight: 700;
-  color: #ccc;
-  text-wrap: pretty;
-}
-
 #menu li.active {
   cursor: initial;
   color: white;
   text-shadow:
     0 0 4px rgba(255, 255, 255, 0.6),
     0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.menu-header {
+  margin-bottom: 16px;
+  font-size: 21px;
+  font-weight: 700;
+  color: #ccc;
+  text-wrap: pretty;
 }
 
 /* === INDEX PAGE CENTERED CANVAS === */

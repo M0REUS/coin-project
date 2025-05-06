@@ -1,17 +1,18 @@
 // === GitHub Pages Base Path ===
 const basePath = `${window.location.origin}/coin-project`;
 
-// === Get coin key from URL ===
-const params = new URLSearchParams(location.search);
-const coinKey = params.get('coin');
+// === Determine the coin slug from the file path ===
+const pathParts = window.location.pathname.split('/');
+const filename = pathParts[pathParts.length - 1]; // e.g., "1-penny.html"
+const coinKey = filename.replace('.html', '');
 
 if (!coinKey) {
-  alert("Missing coin handle. Return to home page.");
+  alert("Missing coin identifier. Return to home page.");
   window.location.href = `${basePath}/index.html`;
-  throw new Error("Missing ?coin= parameter");
+  throw new Error("Missing coin identifier");
 }
 
-// === Fetch coin JSON content ===
+// === Fetch corresponding JSON ===
 const jsonPath = `${basePath}/data/${coinKey}.json`;
 
 fetch(jsonPath)
@@ -20,12 +21,10 @@ fetch(jsonPath)
     return response.json();
   })
   .then(data => {
-    // Set title and content
     document.title = data.title;
     document.getElementById('coin-title').textContent = data.title;
     document.getElementById('coin-description').textContent = data.description;
 
-    // Render chat messages
     const chatBox = document.getElementById('chat-box');
     data.messages.forEach(msg => {
       const div = document.createElement('div');

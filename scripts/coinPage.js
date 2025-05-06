@@ -2,8 +2,10 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { setupGlobalAudioInit, playClick, playHover } from './audio.js';
 
-const params = new URLSearchParams(location.search);
-const coinKey = params.get('coin');
+// === Determine the coin slug from the file path ===
+const pathParts = window.location.pathname.split('/');
+const filename = pathParts[pathParts.length - 1]; // e.g., "1-penny.html"
+const coinKey = filename.replace('.html', '');
 
 // === Initialize audio on first user interaction ===
 setupGlobalAudioInit();
