@@ -26,6 +26,8 @@ const renderer = new THREE.WebGLRenderer({
   alpha: true,
   antialias: true
 });
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.physicallyCorrectLights = true;
 
 // === Lock canvas height to prevent mobile scroll resizing issue ===
 const initialHeight = document.documentElement.clientHeight;
@@ -106,7 +108,7 @@ function animate() {
   requestAnimationFrame(animate);
   if (coin) {
     const delta = clock.getDelta();
-    coin.rotation.z += 0.01 * delta * 60;
+    coin.rotation.y -= 0.01 * delta * 60;
   }
   renderer.render(scene, camera);
 }

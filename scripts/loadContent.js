@@ -30,7 +30,7 @@ fetch(jsonPath)
     data.messages.forEach(msg => {
       const div = document.createElement('div');
       div.className = `message ${msg.type}`;
-      div.textContent = msg.text;
+      div.innerHTML = msg.text;
       chatBox.appendChild(div);
     });
   })

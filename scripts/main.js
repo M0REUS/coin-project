@@ -13,6 +13,8 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 camera.position.z = 16;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas: document.getElementById('three-canvas') });
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.physicallyCorrectLights = true;
 
 let fixedHeight = window.innerHeight;
 renderer.setSize(window.innerWidth, fixedHeight);
@@ -86,6 +88,7 @@ coinPaths.forEach((path, i) => {
     coin.userData.label = coinInfo[i];
     coin.userData.spinX = (Math.random() * 0.01) + 0.0025;
     coin.userData.spinY = (Math.random() * 0.01) + 0.0025;
+    coin.userData.spinZ = (Math.random() * 0.01) + 0.0025;
     coin.userData.bobOffset = Math.random() * Math.PI * 2;
     coin.userData.bobAmplitude = 0.2 + Math.random() * 0.1;
     coin.userData.flyOut = false;
@@ -217,6 +220,7 @@ function animate() {
   coinMeshes.forEach((coin) => {
     coin.rotation.y += coin.userData.spinY * delta * 60;
     coin.rotation.x += coin.userData.spinX * delta * 60;
+    coin.rotation.z += coin.userData.spinZ * delta * 60;
 
     if (!coin.userData.flyOut) {
       const time = clock.elapsedTime;
@@ -244,7 +248,7 @@ function animate() {
     INTERSECTED.getWorldPosition(worldPosition);
     const screenPos = worldPosition.project(camera);
     const x = (screenPos.x * 0.5 + 0.5) * window.innerWidth;
-    const y = (-(screenPos.y * 0.5) + 0.5) * fixedHeight;
+    const y = (-(screenPos.y * 0.5) + 0.525) * fixedHeight;
 
     if (popup) {
       popup.style.left = `${x}px`;
