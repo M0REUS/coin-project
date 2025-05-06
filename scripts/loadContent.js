@@ -32,6 +32,22 @@ fetch(jsonPath)
       div.innerHTML = msg.text;
       chatBox.appendChild(div);
     });
+
+    // === Observer for fade-in on scroll ===
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target); // animate only once
+        }
+      });
+    }, {
+      threshold: 0.9
+    });
+
+    document.querySelectorAll('.message').forEach(msg => {
+      observer.observe(msg);
+    });
   })
   .catch(err => {
     console.error(err);
