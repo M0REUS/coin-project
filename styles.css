@@ -21,6 +21,14 @@ html, body {
   min-height: 100%;
 }
 
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-group {
+  animation-duration: 0.5s;
+}
+
 /* === CANVAS BACKGROUND === */
 canvas {
   position: fixed;
